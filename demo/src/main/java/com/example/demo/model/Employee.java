@@ -1,8 +1,17 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+@Entity
 public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String role;
     private double salary;
@@ -17,6 +26,7 @@ public class Employee {
         this.salary = salary;
     }
 
+    // getters and setters below
     public int getId() {
         return id;
     }
