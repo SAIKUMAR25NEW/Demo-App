@@ -11,37 +11,35 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService service;
+    private final EmployeeService service;
 
-    // GET all employees
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
+    }
+
     @GetMapping
     public List<Employee> getAll() {
-        return service.getAll();
+        return service.getAllEmployees();
     }
 
-    // GET by ID
     @GetMapping("/{id}")
     public Employee getById(@PathVariable int id) {
-        return service.getById(id);
+        return service.getEmployeeById(id);
     }
 
-    // POST add new employee
     @PostMapping
     public Employee add(@RequestBody Employee employee) {
-        return service.add(employee);
+        return service.addEmployee(employee);
     }
 
-    // PUT update employee
     @PutMapping("/{id}")
-    public Employee update(@PathVariable int id, @RequestBody Employee employee) {
-        return service.update(id, employee);
+    public Employee update(@PathVariable int id, @RequestBody Employee updated) {
+        return service.updateEmployee(id, updated);
     }
 
-    // DELETE employee
     @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
-        boolean removed = service.delete(id);
-        return removed ? "Employee deleted" : "Employee not found";
+        service.deleteEmployee(id);
+        return "Employee deleted";
     }
 }

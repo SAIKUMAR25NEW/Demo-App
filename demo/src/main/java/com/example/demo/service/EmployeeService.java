@@ -1,50 +1,47 @@
 package com.example.demo.service;
 
-
 import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
 
-    private List<Employee> employees = new ArrayList<>();
+    private final EmployeeRepository repo;
 
-    public EmployeeService() {
-        employees.add(new Employee(1, "Alice", "Developer", 70000));
-        employees.add(new Employee(2, "Bob", "Tester", 55000));
+    public EmployeeService(EmployeeRepository repo) {
+        this.repo = repo;
     }
 
-    public List<Employee> getAll() {
-        return employees;
+    public List<Employee> getAllEmployees() {
+        return repo.findAll();
     }
 
-    public Employee getById(int id) {
-        return employees.stream()
-                .filter(e -> e.getId() == id)
-                .findFirst()
-                .orElse(null);
+    public Employee getEmployeeById(int id) {
+        return repo.findById(id).orElse(null);
     }
 
-    public Employee add(Employee e) {
-        employees.add(e);
-        return e;
+    public Employee addEmployee(Employee employee) {
+        return repo.save(employee);
     }
 
-    public Employee update(int id, Employee newData) {
-        Employee existing = getById(id);
-        if (existing != null) {
-            existing.setName(newData.getName());
-            existing.setRole(newData.getRole());
-            existing.setSalary(newData.getSalary());
+    public Employee updateEmployee(int id, Employee updatedEmployee) {
+        Optional<Employee> existing = repo.findById(id);
+
+        if (existing.isPresent()) {
+            Employee emp = existing.get();
+            emp.setName(updatedEmployee.getName());
+            emp.setRole(updatedEmployee.getRole());
+            emp.setSalary(updatedEmployee.getSalary());
+            return repo.save(emp);
         }
-        return existing;
+        return null;
     }
 
-    public boolean delete(int id) {
-        return employees.removeIf(e -> e.getId() == id);
+    public void deleteEmployee(int id) {
+        repo.deleteById(id);
     }
 }
-
