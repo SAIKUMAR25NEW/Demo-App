@@ -5,7 +5,7 @@ import com.example.demo.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
