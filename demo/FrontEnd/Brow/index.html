@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee List</title>
+    <title>Employee Manager - Day 3</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,6 +12,7 @@
 
 <button onclick="fetchEmployees()">Load Employees</button>
 
+<!-- TABLE -->
 <table id="employeeTable">
     <thead>
     <tr>
@@ -21,11 +22,39 @@
         <th>Salary</th>
     </tr>
     </thead>
-    <tbody>
-    <!-- Data will be inserted here dynamically -->
-    </tbody>
+    <tbody></tbody>
 </table>
 
+<!-- ================== ADD EMPLOYEE ================== -->
+<h2>Add Employee</h2>
+
+<form id="employeeForm" onsubmit="addEmployee(event)">
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="text" id="salary" placeholder="Salary" required>
+    <button type="submit">Add Employee</button>
+</form>
+
+<!-- ================== UPDATE EMPLOYEE ================== -->
+<h2>Update Employee</h2>
+
+<form id="updateForm" onsubmit="updateEmployee(event)">
+    <input type="number" id="updateId" placeholder="Employee ID" required>
+    <input type="text" id="updateName" placeholder="New Name">
+    <input type="email" id="updateEmail" placeholder="New Email">
+    <input type="text" id="updateSalary" placeholder="New Salary">
+    <button type="submit">Update Employee</button>
+</form>
+
+<!-- ================== DELETE EMPLOYEE ================== -->
+<h2>Delete Employee</h2>
+
+<form id="deleteForm" onsubmit="deleteEmployee(event)">
+    <input type="number" id="deleteId" placeholder="Employee ID" required>
+    <button type="submit">Delete Employee</button>
+</form>
+
 <script src="script.js"></script>
+
 </body>
 </html>
