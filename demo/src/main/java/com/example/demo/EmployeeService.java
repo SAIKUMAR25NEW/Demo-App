@@ -35,6 +35,7 @@ public class EmployeeService {
             Employee emp = existing.get();
             emp.setName(updatedEmployee.getName());
             emp.setRole(updatedEmployee.getRole());
+            emp.setEmail(updatedEmployee.getEmail());
             emp.setSalary(updatedEmployee.getSalary());
             return repo.save(emp);
 
