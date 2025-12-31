@@ -1,49 +1,86 @@
+/* ===== Global Page Styling ===== */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-h1, h2 {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
     color: #333;
 }
 
-button {
-    padding: 10px 20px;
-    margin-bottom: 20px;
-    cursor: pointer;
+/* ===== Header Section ===== */
+header {
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
 }
 
-table {
-    width: 70%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
+/* ===== Main Container ===== */
+.container {
+    background: white;
+    width: 80%;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-th, td {
+/* ===== Section Titles ===== */
+h2 {
+    color: #764ba2;
+    margin-bottom: 15px;
+}
+
+/* ===== Input Fields ===== */
+input, select {
+    width: 100%;
     padding: 10px;
-    border: 1px solid #444;
-    text-align: left;
+    margin: 8px 0 16px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* ===== Buttons ===== */
+button {
+    background: linear-gradient(90deg, #36d1dc, #5b86e5);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Table Styling (If You Display Employees) ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
 th {
-    background-color: #f2f2f2;
-}
-
-form {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-}
-
-input {
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #444;
-    border-radius: 4px;
-}
-
-form button {
-    background-color: #1a73e8;
+    background: #667eea;
     color: white;
-    border: none;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f3f3ff;
 }

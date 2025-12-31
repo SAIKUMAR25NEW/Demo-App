@@ -1,6 +1,17 @@
-// 1. GET Employees
+const apiUrl = "http://localhost:8080/employees";
+
+// Show message helper
+function showMessage(message, type = "info") {
+    const msgBox = document.getElementById("message");
+    msgBox.innerText = message;
+    msgBox.className = type;  // success, error, info
+    msgBox.style.display = "block";
+    setTimeout(() => msgBox.style.display = "none", 4000);
+}
+
+// ======================= GET =======================
 function fetchEmployees() {
-    fetch("http://localhost:8080/employees")
+    fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.querySelector("#employeeTable tbody");
@@ -18,21 +29,30 @@ function fetchEmployees() {
                 tableBody.innerHTML += row;
             });
         })
-        .catch(error => console.error("Error fetching employees:", error));
+        .catch(() => showMessage("Failed to load employees. Server unavailable.", "error"));
 }
 
-
-// 2. POST Add Employee
+// ======================= POST =======================
 function addEmployee(event) {
     event.preventDefault();
 
-    const employee = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        salary: document.getElementById("salary").value
-    };
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const salary = document.getElementById("salary").value.trim();
 
-    fetch("http://localhost:8080/employees", {
+    if (!name || !email || !salary) {
+        showMessage("All fields are required!", "error");
+        return;
+    }
+
+    if (!email.includes("@")) {
+        showMessage("Invalid email format!", "error");
+        return;
+    }
+
+    const employee = { name, email, salary };
+
+    fetch(apiUrl, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -40,79 +60,81 @@ function addEmployee(event) {
         },
         body: JSON.stringify(employee)
     })
-    .then(response => {
-        if (!response.ok) {
-            console.log("STATUS:", response.status);
-            alert("Error: " + response.status + " — Check console");
-            throw new Error("Request failed");
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert("Employee added successfully!");
-        fetchEmployees();
-        document.getElementById("employeeForm").reset();
-    })
-    .catch(error => console.error("Add employee failed:", error));
+        .then(response => {
+            if (!response.ok) throw new Error("Error");
+            return response.json();
+        })
+        .then(() => {
+            showMessage("Employee added successfully!", "success");
+            fetchEmployees();
+            document.getElementById("employeeForm").reset();
+        })
+        .catch(() => showMessage("Failed to add employee.", "error"));
 }
-// 3. PUT
+
+
+// ======================= PUT =======================
 function updateEmployee(event) {
     event.preventDefault();
 
-    const id = document.getElementById("updateId").value;
+    const id = document.getElementById("updateId").value.trim();
+    const name = document.getElementById("updateName").value.trim();
+    const email = document.getElementById("updateEmail").value.trim();
+    const salary = document.getElementById("updateSalary").value.trim();
 
-    const updatedEmployee = {
-        name: document.getElementById("updateName").value,
-        email: document.getElementById("updateEmail").value,
-        salary: document.getElementById("updateSalary").value
-    };
+    if (!id) {
+        showMessage("Employee ID is required!", "error");
+        return;
+    }
 
-    fetch(`http://localhost:8080/employees/${id}`, {
+    const employee = { name, email, salary };
+
+    fetch(`${apiUrl}/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Authorization": "Basic " + btoa("admin:password123")
         },
-        body: JSON.stringify(updatedEmployee)
+        body: JSON.stringify(employee)
     })
-    .then(response => {
-        if (!response.ok) {
-            alert("Update failed. Check ID.");
-            throw new Error("Update failed");
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert("Employee updated successfully.");
-        fetchEmployees();
-        document.getElementById("updateForm").reset();
-    })
-    .catch(error => console.error("Update error:", error));
+        .then(response => {
+            if (!response.ok) throw new Error();
+            return response.json();
+        })
+        .then(() => {
+            showMessage("Employee updated successfully!", "success");
+            fetchEmployees();
+            document.getElementById("updateForm").reset();
+        })
+        .catch(() => showMessage("Failed to update employee.", "error"));
 }
-// 4. DELETE
+
+
+// ======================= DELETE =======================
 function deleteEmployee(event) {
     event.preventDefault();
 
-    const id = document.getElementById("deleteId").value;
+    const id = document.getElementById("deleteId").value.trim();
 
-    fetch(`http://localhost:8080/employees/${id}`, {
+    if (!id) {
+        showMessage("Employee ID is required!", "error");
+        return;
+    }
+
+    fetch(`${apiUrl}/${id}`, {
         method: "DELETE",
         headers: {
             "Authorization": "Basic " + btoa("admin:password123")
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            alert("Delete failed. Check ID.");
-            throw new Error("Delete error");
-        }
-        return response.text();
-    })
-    .then(msg => {
-        alert("Employee deleted.");
-        fetchEmployees();
-        document.getElementById("deleteForm").reset();
-    })
-    .catch(error => console.error("Delete error:", error));
+        .then(response => {
+            if (!response.ok) throw new Error();
+            return response.text();
+        })
+        .then(() => {
+            showMessage("Employee deleted!", "success");
+            fetchEmployees();
+            document.getElementById("deleteForm").reset();
+        })
+        .catch(() => showMessage("Failed to delete employee.", "error"));
 }
-
