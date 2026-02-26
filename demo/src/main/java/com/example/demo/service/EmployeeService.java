@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
@@ -11,9 +11,12 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository repo;
+    private final EmployeeEventProducer producer;
 
-    public EmployeeService(EmployeeRepository repo) {
+    public EmployeeService(EmployeeRepository repo,
+                           EmployeeEventProducer producer) {
         this.repo = repo;
+        this.producer = producer;
     }
 
     public List<Employee> getAllEmployees() {
@@ -25,7 +28,12 @@ public class EmployeeService {
     }
 
     public Employee addEmployee(Employee employee) {
-        return repo.save(employee);
+        Employee saved = repo.save(employee);
+
+        // 🔥 KAFKA EVENT
+     //   producer.publishEmployeeCreated(saved.getId());
+
+        return saved;
     }
 
     public Employee updateEmployee(int id, Employee updatedEmployee) {
@@ -37,8 +45,13 @@ public class EmployeeService {
             emp.setRole(updatedEmployee.getRole());
             emp.setEmail(updatedEmployee.getEmail());
             emp.setSalary(updatedEmployee.getSalary());
-            return repo.save(emp);
 
+            Employee saved = repo.save(emp);
+
+            // 🔥 KAFKA EVENT (optional)
+            producer.publishEmployeeCreated(saved.getId());
+
+            return saved;
         }
         return null;
     }
